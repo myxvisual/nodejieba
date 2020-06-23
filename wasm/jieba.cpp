@@ -15,7 +15,7 @@ cppjieba::Jieba* global_jieba_handle;
 
 bool load(
   string dictPath,
-  string modelPath,
+  string modelContent,
   string userDictPath,
   string idfPath,
   string stopWordsPath
@@ -23,7 +23,7 @@ bool load(
   delete global_jieba_handle;
   global_jieba_handle = new cppjieba::Jieba(
     dictPath,
-    modelPath,
+    modelContent,
     userDictPath,
     idfPath,
     stopWordsPath

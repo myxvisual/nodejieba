@@ -1,0 +1,14 @@
+{
+    "files.associations": {
+        "*.scss": "sass",
+        "*.ejs": "ejs",
+        "*.css": "css",
+        "*.svg": "xml",
+        "ostream": "cpp",
+        "*.cjson": "jsonc",
+        "*.wxss": "css",
+        "*.wxs": "javascript",
+        "fstream": "cpp",
+        "unordered_map": "cpp"
+    }
+}

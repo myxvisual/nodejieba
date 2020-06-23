@@ -16,7 +16,7 @@ struct HMMModel {
    * */
   enum {B = 0, E = 1, M = 2, S = 3, STATUS_SUM = 4};
 
-  HMMModel(const string& modelPath) {
+  HMMModel(const string& modelContent) {
     memset(startProb, 0, sizeof(startProb));
     memset(transProb, 0, sizeof(transProb));
     statMap[0] = 'B';
@@ -27,13 +27,13 @@ struct HMMModel {
     emitProbVec.push_back(&emitProbE);
     emitProbVec.push_back(&emitProbM);
     emitProbVec.push_back(&emitProbS);
-    LoadModel(modelPath);
+    LoadModel(modelContent);
   }
   ~HMMModel() {
   }
+  // TODO:
   void LoadModel(const string& filePath) {
     ifstream ifile(filePath.c_str());
-    XCHECK(ifile.is_open()) << "open " << filePath << " failed";
     string line;
     vector<string> tmp;
     vector<string> tmp2;
