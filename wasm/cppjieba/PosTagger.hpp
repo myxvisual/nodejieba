@@ -19,7 +19,7 @@ class PosTagger {
   ~PosTagger() {
   }
 
-  bool Tag(const string& src, vector<pair<string, string> >& res, const SegmentTagged& segment) const {
+  bool Tag(string src, vector<pair<string, string> >& res, const SegmentTagged& segment) const {
     vector<string> CutRes;
     segment.Cut(src, CutRes);
 
