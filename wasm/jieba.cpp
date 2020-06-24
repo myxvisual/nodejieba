@@ -6,6 +6,8 @@
 #include <emscripten/bind.h>
 
 using emscripten::function;
+using emscripten::register_vector;
+using emscripten::register_map;
 
 using std::vector;
 using std::string;
@@ -38,7 +40,7 @@ bool insertWord(string word, string tag = "x") {
 
 vector<string> cut(string sentence, bool useHMM = false) {
   vector<string> words;
-  global_jieba_handle->Cut(sentence, words, useHMM); 
+  global_jieba_handle->Cut(sentence, words, useHMM);
   return words;
 }
 
@@ -78,7 +80,19 @@ vector<pair<string, double>> extract(string sentence, size_t topN) {
   return words;
 }
 
-EMSCRIPTEN_BINDINGS(my_module) {
+vector<string> returnVectorData() {
+  vector<string> v;
+  v.push_back("10");
+  v.push_back("11");
+  return v;
+}
+
+EMSCRIPTEN_BINDINGS(module) {
+    // register bindings
+    register_vector<int>("vector<int>");
+    register_vector<string>("vector<string>");
+    register_map<int, string>("map<int, string>");
+
     function("load", &load);
     function("insertWord", &insertWord);
     function("cut", &cut);
@@ -88,4 +102,5 @@ EMSCRIPTEN_BINDINGS(my_module) {
     function("cutSmall", &cutSmall);
     function("tag", &tag);
     function("extract", &extract);
+    function("returnVectorData", &returnVectorData);
 }
