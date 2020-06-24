@@ -32,13 +32,17 @@ struct HMMModel {
   ~HMMModel() {
   }
   // TODO:
-  void LoadModel(const string& filePath) {
-    ifstream ifile(filePath.c_str());
+  void LoadModel(const string& modelContent) {
+    vector<string> lines;
     string line;
     vector<string> tmp;
     vector<string> tmp2;
+    int lineIndex = 0;
+
     //Load startProb
-    XCHECK(GetLine(ifile, line));
+    Split(modelContent, lines, "\n");
+    XCHECK(GetLine(lines, line, lineIndex));
+  
     Split(line, tmp, " ");
     XCHECK(tmp.size() == STATUS_SUM);
     for (size_t j = 0; j< tmp.size(); j++) {
@@ -47,7 +51,7 @@ struct HMMModel {
 
     //Load transProb
     for (size_t i = 0; i < STATUS_SUM; i++) {
-      XCHECK(GetLine(ifile, line));
+      XCHECK(GetLine(lines, line, lineIndex));
       Split(line, tmp, " ");
       XCHECK(tmp.size() == STATUS_SUM);
       for (size_t j =0; j < STATUS_SUM; j++) {
@@ -56,21 +60,22 @@ struct HMMModel {
     }
 
     //Load emitProbB
-    XCHECK(GetLine(ifile, line));
+    XCHECK(GetLine(lines, line, lineIndex));
     XCHECK(LoadEmitProb(line, emitProbB));
 
     //Load emitProbE
-    XCHECK(GetLine(ifile, line));
+    XCHECK(GetLine(lines, line, lineIndex));
     XCHECK(LoadEmitProb(line, emitProbE));
 
     //Load emitProbM
-    XCHECK(GetLine(ifile, line));
+    XCHECK(GetLine(lines, line, lineIndex));
     XCHECK(LoadEmitProb(line, emitProbM));
 
     //Load emitProbS
-    XCHECK(GetLine(ifile, line));
+    XCHECK(GetLine(lines, line, lineIndex));
     XCHECK(LoadEmitProb(line, emitProbS));
   }
+
   double GetEmitProb(const EmitProbMap* ptMp, Rune key, 
         double defVal)const {
     EmitProbMap::const_iterator cit = ptMp->find(key);
@@ -79,8 +84,11 @@ struct HMMModel {
     }
     return cit->second;
   }
-  bool GetLine(ifstream& ifile, string& line) {
-    while (getline(ifile, line)) {
+
+  bool GetLine(vector<string>& lines, string& line, int& index) {
+    while (index > -1) {
+      line = lines[index];
+      index += 1;
       Trim(line);
       if (line.empty()) {
         continue;
