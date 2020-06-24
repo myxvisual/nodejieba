@@ -12,6 +12,19 @@ function vectorToArray(vec) {
 
     return arr
 }
+function mapToObject(map) {
+    const keys = map.keys();
+    const keySize = keys.size()
+    const obj = {}
+    
+    for (let i = 0; i < keySize; i++) {
+        const key = keys.get(i)
+        const value = map.get(key)
+        obj[key] = value
+    }
+
+    return obj
+}
 
 emModule.onRuntimeInitialized = function() {
     console.log(emModule.returnVectorData())
@@ -23,9 +36,11 @@ emModule.onRuntimeInitialized = function() {
     const DEFAULT_STOP_WORD_DICT = fs.readFileSync(path.join(__dirname, "../dict/stop_words.utf8"), "utf-8")
     console.log("=========")
     const loadRes = emModule.load(DEFAULT_DICT, DEFAULT_HMM_DICT, DEFAULT_USER_DICT, DEFAULT_IDF_DICT, DEFAULT_STOP_WORD_DICT)
+    console.log(loadRes)
     const cutVec = emModule.cut("南京市长江大桥", false);
     const cutArr = vectorToArray(cutVec)
-    console.log(loadRes)
     console.log(cutArr)
-    // console.log(emModule.tag("红掌拨清波"))
+    const tagMap = emModule.tag("红掌拨清波")
+    const tagObj = mapToObject(tagMap)
+    console.log(tagObj)
 }

@@ -718,8 +718,8 @@ var wasmMemory;
 // In the wasm backend, we polyfill the WebAssembly object,
 // so this creates a (non-native-wasm) table for us.
 var wasmTable = new WebAssembly.Table({
-  'initial': 456,
-  'maximum': 456 + 0,
+  'initial': 468,
+  'maximum': 468 + 0,
   'element': 'anyfunc'
 });
 
@@ -1346,11 +1346,11 @@ function updateGlobalBufferAndViews(buf) {
 }
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 5271440,
+    STACK_BASE = 5271408,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 28560,
-    DYNAMIC_BASE = 5271440,
-    DYNAMICTOP_PTR = 28400;
+    STACK_MAX = 28528,
+    DYNAMIC_BASE = 5271408,
+    DYNAMICTOP_PTR = 28368;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1932,7 +1932,7 @@ var ASM_CONSTS = {
 
 
 
-// STATICTOP = STATIC_BASE + 27536;
+// STATICTOP = STATIC_BASE + 27504;
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
 
@@ -6104,7 +6104,7 @@ var ASM_CONSTS = {
     }
 
   function _emscripten_get_sbrk_ptr() {
-      return 28400;
+      return 28368;
     }
 
   function _emscripten_memcpy_big(dest, src, num) {
@@ -6287,10 +6287,10 @@ var ASM_CONSTS = {
   }
 
   
-  var ___tm_current=28416;
+  var ___tm_current=28384;
   
   
-  var ___tm_timezone=(stringToUTF8("GMT", 28464, 4), 28464);
+  var ___tm_timezone=(stringToUTF8("GMT", 28432, 4), 28432);
   
   function _tzset() {
       // TODO: Use (malleable) environment variables instead of system settings.
@@ -7008,6 +7008,13 @@ var dynCall_iiiii = Module["dynCall_iiiii"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
   return Module["asm"]["dynCall_iiiii"].apply(null, arguments)
+};
+
+/** @type {function(...*):?} */
+var dynCall_viiid = Module["dynCall_viiid"] = function() {
+  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+  return Module["asm"]["dynCall_viiid"].apply(null, arguments)
 };
 
 /** @type {function(...*):?} */
