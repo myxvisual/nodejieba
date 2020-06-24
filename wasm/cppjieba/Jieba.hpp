@@ -11,8 +11,8 @@ class Jieba {
   Jieba(const string& dictContent, 
         const string& modelContent,
         const string& userDictContent, 
-        const string& idfPath, 
-        const string& stopWordPath) 
+        const string& idfContent, 
+        const string& stopWordContent) 
     : dict_trie_(dictContent, userDictContent),
       model_(modelContent),
       mp_seg_(&dict_trie_),
@@ -20,7 +20,7 @@ class Jieba {
       mix_seg_(&dict_trie_, &model_),
       full_seg_(&dict_trie_),
       query_seg_(&dict_trie_, &model_),
-      extractor(&dict_trie_, &model_, idfPath, stopWordPath) {
+      extractor(&dict_trie_, &model_, idfContent, stopWordContent) {
   }
   ~Jieba() {
   }
@@ -62,7 +62,7 @@ class Jieba {
     mp_seg_.Cut(sentence, words, max_word_len);
   }
   
-  void Tag(const string& sentence, vector<pair<string, string> >& words) const {
+  void Tag(string sentence, vector<pair<string, string> >& words) const {
     mix_seg_.Tag(sentence, words);
   }
   string LookupTag(const string &str) const {

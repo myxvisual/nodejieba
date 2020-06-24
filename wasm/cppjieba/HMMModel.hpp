@@ -31,7 +31,6 @@ struct HMMModel {
   }
   ~HMMModel() {
   }
-  // TODO:
   void LoadModel(const string& modelContent) {
     vector<string> lines;
     string line;

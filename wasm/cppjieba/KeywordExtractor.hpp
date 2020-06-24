@@ -30,11 +30,11 @@ class KeywordExtractor {
   }
   KeywordExtractor(const DictTrie* dictTrie, 
         const HMMModel* model,
-        const string& idfPath, 
-        const string& stopWordPath) 
+        const string& idfContent, 
+        const string& stopWordContent) 
     : segment_(dictTrie, model) {
-    LoadIdfDict(idfPath);
-    LoadStopWordDict(stopWordPath);
+    LoadIdfDict(idfContent);
+    LoadStopWordDict(stopWordContent);
   }
   ~KeywordExtractor() {
   }
@@ -92,14 +92,17 @@ class KeywordExtractor {
     keywords.resize(topN);
   }
  private:
-  void LoadIdfDict(const string& idfPath) {
-    ifstream ifs(idfPath.c_str());
+  void LoadIdfDict(const string& idfContent) {
+    vector<string> lines;
     string line ;
     vector<string> buf;
+    Split(idfContent, lines, "\n");
+
     double idf = 0.0;
     double idfSum = 0.0;
     size_t lineno = 0;
-    for (; getline(ifs, line); lineno++) {
+    for (; lineno < lines.size(); lineno++) {
+      line = lines[lineno];
       buf.clear();
       if (line.empty()) {
         XLOG(ERROR) << "lineno: " << lineno << " empty. skipped.";
@@ -120,12 +123,16 @@ class KeywordExtractor {
     idfAverage_ = idfSum / lineno;
     assert(idfAverage_ > 0.0);
   }
-  void LoadStopWordDict(const string& filePath) {
-    ifstream ifs(filePath.c_str());
+  void LoadStopWordDict(const string& fileContent) {
+    vector<string> lines;
     string line ;
-    while (getline(ifs, line)) {
+    Split(fileContent, lines, "\n");
+
+    for (auto i = lines.begin(); i != lines.end(); i++) {
+      line = *i;
       stopWords_.insert(line);
     }
+  
     assert(stopWords_.size());
   }
 

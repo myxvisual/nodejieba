@@ -17,16 +17,16 @@ bool load(
   string dictContent,
   string modelContent,
   string userDictContent,
-  string idfPath,
-  string stopWordsPath
+  string idfContent,
+  string stopWordsContent
 ) {
   delete global_jieba_handle;
   global_jieba_handle = new cppjieba::Jieba(
     dictContent,
     modelContent,
     userDictContent,
-    idfPath,
-    stopWordsPath
+    idfContent,
+    stopWordsContent
   );
   return true;
 }
@@ -36,7 +36,7 @@ bool insertWord(string word, string tag = "x") {
   return global_jieba_handle->InsertUserWord(word, tag);
 }
 
-vector<string> cut(const std::string &sentence, bool useHMM = false) {
+vector<string> cut(string sentence, bool useHMM = false) {
   vector<string> words;
   global_jieba_handle->Cut(sentence, words, useHMM); 
   return words;
