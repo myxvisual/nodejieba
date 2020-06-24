@@ -8,13 +8,13 @@ namespace cppjieba {
 
 class Jieba {
  public:
-  Jieba(const string& dict_path, 
-        const string& model_path,
-        const string& user_dict_path, 
+  Jieba(const string& dictContent, 
+        const string& modelContent,
+        const string& userDictContent, 
         const string& idfPath, 
         const string& stopWordPath) 
-    : dict_trie_(dict_path, user_dict_path),
-      model_(model_path),
+    : dict_trie_(dictContent, userDictContent),
+      model_(modelContent),
       mp_seg_(&dict_trie_),
       hmm_seg_(&model_),
       mix_seg_(&dict_trie_, &model_),

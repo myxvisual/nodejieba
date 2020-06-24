@@ -14,17 +14,17 @@ using std::pair;
 cppjieba::Jieba* global_jieba_handle;
 
 bool load(
-  string dictPath,
+  string dictContent,
   string modelContent,
-  string userDictPath,
+  string userDictContent,
   string idfPath,
   string stopWordsPath
 ) {
   delete global_jieba_handle;
   global_jieba_handle = new cppjieba::Jieba(
-    dictPath,
+    dictContent,
     modelContent,
-    userDictPath,
+    userDictContent,
     idfPath,
     stopWordsPath
   );

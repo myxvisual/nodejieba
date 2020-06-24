@@ -94,7 +94,6 @@ class KeywordExtractor {
  private:
   void LoadIdfDict(const string& idfPath) {
     ifstream ifs(idfPath.c_str());
-    XCHECK(ifs.is_open()) << "open " << idfPath << " failed";
     string line ;
     vector<string> buf;
     double idf = 0.0;
@@ -123,7 +122,6 @@ class KeywordExtractor {
   }
   void LoadStopWordDict(const string& filePath) {
     ifstream ifs(filePath.c_str());
-    XCHECK(ifs.is_open()) << "open " << filePath << " failed";
     string line ;
     while (getline(ifs, line)) {
       stopWords_.insert(line);
