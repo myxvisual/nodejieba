@@ -1,0 +1,14 @@
+{
+  "name": "wasm",
+  "version": "1.0.0",
+  "description": "",
+  "main": "jieba.js",
+  "scripts": {
+    "build:test": "npm run build && npm test",
+    "build": "emcc --bind ./jieba.cpp -s FORCE_FILESYSTEM=1 -o jieba.js",
+    "test": "node ./test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
