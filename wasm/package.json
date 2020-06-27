@@ -4,6 +4,8 @@
   "description": "",
   "main": "jieba.js",
   "scripts": {
+    "build:html": "emcc --bind -Oz ./jieba.cpp -s WASM=1 -o jieba.html",
+    "build:wasm": "emcc --bind -Oz ./jieba.cpp -s WASM=1 -s SIDE_MODULE=1 -o jieba && cp jieba.wasm  -rf ../../react-boilerplate/src/routes/MyEditor/jieba.wasm",
     "build:test": "npm run build && npm test",
     "build": "emcc --bind ./jieba.cpp -s FORCE_FILESYSTEM=1 -s ALLOW_MEMORY_GROWTH=1 -o jieba.js",
     "test": "node ./test.js"

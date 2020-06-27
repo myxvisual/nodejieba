@@ -19,25 +19,28 @@ class KeywordExtractor {
     double weight;
   }; // struct Word
 
-  KeywordExtractor(const string& dictPath, 
-        const string& hmmFilePath, 
-        const string& idfPath, 
-        const string& stopWordPath, 
-        const string& userDict = "") 
-    : segment_(dictPath, hmmFilePath, userDict) {
-    LoadIdfDict(idfPath);
-    LoadStopWordDict(stopWordPath);
-  }
-  KeywordExtractor(const DictTrie* dictTrie, 
-        const HMMModel* model,
-        const string& idfContent, 
-        const string& stopWordContent) 
-    : segment_(dictTrie, model) {
+  KeywordExtractor(
+    const string& dictContent, 
+    const string& hmmContent, 
+    const string& idfContent, 
+    const string& stopWordContent, 
+    const string& userDict = ""
+  ) : segment_(dictContent, hmmContent, userDict) {
     LoadIdfDict(idfContent);
     LoadStopWordDict(stopWordContent);
   }
-  ~KeywordExtractor() {
+  
+  KeywordExtractor(
+    const DictTrie* dictTrie, 
+    const HMMModel* model,
+    const string& idfContent, 
+    const string& stopWordContent
+  ) : segment_(dictTrie, model) {
+    LoadIdfDict(idfContent);
+    LoadStopWordDict(stopWordContent);
   }
+
+  ~KeywordExtractor() {}
 
   void Extract(const string& sentence, vector<string>& keywords, size_t topN) const {
     vector<Word> topWords;
