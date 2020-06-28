@@ -4,12 +4,12 @@
 #include <cmath>
 #include <set>
 #include "MixSegment.hpp"
+#include "./util.h"
 
 namespace cppjieba {
 
 using namespace limonp;
 using namespace std;
-
 /*utf8*/
 class KeywordExtractor {
  public:
@@ -96,45 +96,33 @@ class KeywordExtractor {
   }
  private:
   void LoadIdfDict(const string& idfContent) {
-    vector<string> lines;
-    string line ;
-    vector<string> buf;
-    Split(idfContent, lines, "\n");
-
-    double idf = 0.0;
     double idfSum = 0.0;
-    size_t lineno = 0;
-    for (; lineno < lines.size(); lineno++) {
-      line = lines[lineno];
-      buf.clear();
-      if (line.empty()) {
-        XLOG(ERROR) << "lineno: " << lineno << " empty. skipped.";
-        continue;
-      }
+    int lineno = 0;
+
+    auto addIdfLine = [&idfSum, this](string line) {
+      vector<string> buf;
+      double idf;
       Split(line, buf, " ");
-      if (buf.size() != 2) {
-        XLOG(ERROR) << "line: " << line << ", lineno: " << lineno << " empty. skipped.";
-        continue;
+
+      if (buf.size() == 2) {
+        idf = atof(buf[1].c_str());
+        idfMap_[buf[0]] = idf;
+        idfSum += idf;
       }
-      idf = atof(buf[1].c_str());
-      idfMap_[buf[0]] = idf;
-      idfSum += idf;
+    };
 
-    }
+    getSplitLine(idfContent, [&addIdfLine, &lineno, this](int originLineno, std::string line) {
+      addIdfLine(line);
+      lineno += 1;
+    });
 
-    assert(lineno);
     idfAverage_ = idfSum / lineno;
-    assert(idfAverage_ > 0.0);
   }
-  void LoadStopWordDict(const string& fileContent) {
-    vector<string> lines;
-    string line ;
-    Split(fileContent, lines, "\n");
 
-    for (auto i = lines.begin(); i != lines.end(); i++) {
-      line = *i;
+  void LoadStopWordDict(const string& stopWordContent) {
+    getSplitLine(stopWordContent, [this](int originLineno, std::string line) {
       stopWords_.insert(line);
-    }
+    });
   
     assert(stopWords_.size());
   }

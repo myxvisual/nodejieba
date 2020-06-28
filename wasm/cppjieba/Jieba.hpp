@@ -5,7 +5,6 @@
 #include "KeywordExtractor.hpp"
 
 namespace cppjieba {
-
 class Jieba {
  public:
   Jieba(const string& dictContent, 

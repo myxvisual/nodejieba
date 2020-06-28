@@ -14,6 +14,7 @@
 #include "../limonp/Logging.hpp"
 #include "Unicode.hpp"
 #include "Trie.hpp"
+#include "./util.h"
 
 namespace cppjieba {
 
@@ -102,7 +103,8 @@ class DictTrie {
   void InserUserDictNode(const string& line) {
     vector<string> buf;
     DictUnit node_info;
-    Split(line, buf, " ");
+    // TODO: reaplace " " to ","
+    Split(line, buf, ",");
     if(buf.size() == 1){
           MakeNodeInfo(node_info, 
                 buf[0], 
@@ -139,18 +141,9 @@ class DictTrie {
   }
 
   void LoadUserDict(const string& userDictContent) {
-    vector<string> lines;
-    Split(userDictContent, lines, "\n");
-
-    string line;
-    
-    for (auto i = lines.begin(); i != lines.end(); ++i) {
-      auto line = *i;
-      if (line.size() == 0) {
-        continue;
-      }
+    getSplitLine(userDictContent, [this](int originLineno, std::string line) {
       InserUserDictNode(line);
-    }
+    });
   }
 
 
@@ -194,14 +187,10 @@ class DictTrie {
   }
 
   void LoadDict(const string& dicContent) {
-    vector<string> lines;
-    string line;
     vector<string> buf;
     DictUnit node_info;
-    Split(dicContent, lines, "\n");
-
-    for (auto i = lines.begin(); i != lines.end(); ++i) {
-      auto line = *i;
+    getSplitLine(dicContent, [&buf, &node_info, this](int lineno, std::string line) {
+      if (line.size() < 1) return;
       Split(line, buf, " ");
       MakeNodeInfo(
         node_info, 
@@ -210,8 +199,9 @@ class DictTrie {
         buf[2]
       );
       static_node_infos_.push_back(node_info);
-    }
+    });
   }
+
 
   static bool WeightCompare(const DictUnit& lhs, const DictUnit& rhs) {
     return lhs.weight < rhs.weight;

@@ -3,6 +3,7 @@
 
 #include "../limonp/StringUtil.hpp"
 #include "Trie.hpp"
+#include "./util.h"
 
 namespace cppjieba {
 
@@ -31,6 +32,8 @@ struct HMMModel {
   }
   ~HMMModel() {
   }
+
+  // TODO: PERFORMANCE ISSUE
   void LoadModel(const string& modelContent) {
     vector<string> lines;
     string line;
@@ -38,8 +41,10 @@ struct HMMModel {
     vector<string> tmp2;
     int lineIndex = 0;
 
+    getSplitLine(modelContent, [&lines, this](int originLineno, std::string line) {
+      lines.push_back(line);
+    });
     //Load startProb
-    Split(modelContent, lines, "\n");
     XCHECK(GetLine(lines, line, lineIndex));
   
     Split(line, tmp, " ");
@@ -99,6 +104,7 @@ struct HMMModel {
     }
     return false;
   }
+
   bool LoadEmitProb(const string& line, EmitProbMap& mp) {
     if (line.empty()) {
       return false;
