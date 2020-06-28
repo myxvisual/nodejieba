@@ -4,10 +4,10 @@
 
 template <typename Functor>
 inline void getSplitLine(std::string content, Functor cb) {
-    auto contentSize = content.size();
-    auto n = "\n";
-    auto r = "\r";
-    auto rn = "\r\n";
+    size_t contentSize = content.size();
+    const char* n = "\n";
+    const char* r = "\r";
+    const char* rn = "\r\n";
     int lineno = 0;
     size_t pos = 0;
 
@@ -21,20 +21,20 @@ inline void getSplitLine(std::string content, Functor cb) {
             isN = strncmp(n, signleChar, 1) == 0;
         }
         if (isR) {
-            auto nextChar = &content[i + 1];
+            const char* nextChar = &content[i + 1];
             isRN = strncmp(n, nextChar, 1) == 0;
         }
 
         bool isNewLine = isN || isR;
         if (isNewLine) {
-            auto line = content.substr(pos, i - pos);
+            std::string line = content.substr(pos, i - pos);
             pos = i + (isRN ? 2 : 1);
             cb(lineno, line);
             lineno += 1;
         }
     }
 
-    auto line = content.substr(pos, contentSize - pos);
+    std::string line = content.substr(pos, contentSize - pos);
     cb(lineno, line);
     lineno += 1;
 }
