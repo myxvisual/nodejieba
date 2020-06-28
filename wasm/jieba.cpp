@@ -2,6 +2,7 @@
 #include <vector>
 #include "./cppjieba/Jieba.hpp"
 #include "./cppjieba/KeywordExtractor.hpp"
+#include <fstream>
 
 #include <emscripten/bind.h>
 
@@ -17,11 +18,11 @@ using std::pair;
 cppjieba::Jieba* global_jieba_handle;
 
 bool load(
-  string dictContent,
-  string modelContent,
-  string userDictContent,
-  string idfContent,
-  string stopWordsContent
+  const string& dictContent,
+  const string& modelContent,
+  const string& userDictContent,
+  const string& idfContent,
+  const string& stopWordsContent
 ) {
   delete global_jieba_handle;
   global_jieba_handle = new cppjieba::Jieba(
@@ -99,6 +100,13 @@ vector<string> returnVectorData() {
   return v;
 }
 
+void testReadFile() {
+  std::ifstream fileStream("/tmp/test.txt");
+  for(std::string line; getline(fileStream, line);) {
+    std::cout << line << std::endl;
+  }
+}
+
 EMSCRIPTEN_BINDINGS(module) {
     // register bindings
     register_vector<int>("vector<int>");
@@ -115,5 +123,7 @@ EMSCRIPTEN_BINDINGS(module) {
     function("cutSmall", &cutSmall);
     function("tag", &tag);
     function("extract", &extract);
+  
     function("returnVectorData", &returnVectorData);
+    function("testReadFile", &testReadFile);
 }

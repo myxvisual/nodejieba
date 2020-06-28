@@ -26,8 +26,9 @@ function mapToObject(map) {
     return obj
 }
 
-
 emModule.onRuntimeInitialized = function() {
+    emModule['FS_createDataFile']("/tmp", "test.txt", "test-content", true, true)
+    emModule.testReadFile();
     const DEFAULT_DICT = fs.readFileSync(path.join(__dirname, "../dict/jieba.dict.utf8"), "utf-8")
     const DEFAULT_HMM_DICT = fs.readFileSync(path.join(__dirname, "../dict/hmm_model.utf8"), "utf-8")
     const DEFAULT_USER_DICT = fs.readFileSync(path.join(__dirname, "../dict/user.dict.utf8"), "utf-8")
