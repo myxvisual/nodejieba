@@ -7,7 +7,7 @@
     "build:html": "emcc --bind -Oz ./jieba.cpp -s WASM=1 -o jieba.html",
     "build:wasm": "emcc --bind -Oz ./jieba.cpp -s WASM=1 -s SIDE_MODULE=1 -o jieba && cp jieba.wasm  -rf ../../react-boilerplate/src/routes/MyEditor/jieba.wasm",
     "build:test": "npm run build && npm test",
-    "build": "emcc -s MODULARIZE=1 -std=c++14 -O3 --bind ./jieba.cpp -s FILESYSTEM=0 -s INITIAL_MEMORY=33554432 -s ASSERTIONS=1 -o jieba.js",
+    "build": "emcc -s MODULARIZE=1 -std=c++14 -O3 --bind ./jieba.cpp -s FILESYSTEM=0 -s INITIAL_MEMORY=196608000 -s ASSERTIONS=1 -o jieba.js",
     "test": "node ./test.js"
   },
   "keywords": [],
